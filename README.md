@@ -83,3 +83,8 @@ Since our server is a single-threaded one, requests are handled sequentially, so
 ### Commit 5 Reflection
 #### How the ThreadPool works?
 A thread pool is a group of spawned threads that are ready to execute a task but still waiting to get assigned to execute one. There are a fixed number of threads "queueing" in the thread pool so that the requests are assigned according to the thread queue. When a thread is executing a task, the rest threads in the pool are available to handle any other tasks that will come in even though the first thread is still executing a task. Moreover, it can also handle other tasks when the server is executing `/sleep`, so we won't have that much delay as it was previously. This allows us to increase the throughput of our server because it allows us to process tasks concurrently. In this program, I allow 4 to be the fixed number of threads that can queue in the thread pool. The number is fixed so that the it will not cause an overloading in my server. 
+
+### Commit Bonus Reflection
+#### Creating a function build as a replacement to new
+
+I followed the tutorials provided in the Rust documentation (Chapter 12) to implement `build` as a replacement to `new` for creating the Threadpool. Before modifying the program, I assumed that the size of the Threadpool will always be a positive value (as seen on the assert statement). However, things will not always go the way I wanted to. What if the Threadpool's size is negative? Or even zero? Therefore, `build` is used to ensure that whenever I (or maybe other users that will use this program in the future) create a Threadpool with incorrect size, it will return an error message and stop the process. 
