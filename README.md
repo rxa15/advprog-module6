@@ -43,3 +43,25 @@ According to the Rust documentation (on Chapter 20), the `fs` statement is used 
 Here is the example of my browser display when I access the web server:
 
 ![Commit 2 screen capture](/assets/images/Commit%202%20Tutorial%206%20Adpro.png)
+
+### Commit 3 Reflection
+#### How to split between response?
+The responses are differ by their endpoints. In this part of my code, 
+```
+let request_line = 
+    buf_reader.lines().next().unwrap().unwrap();
+
+let (status_line, filename) = if request_line == "GET / HTTP/1.1" {
+    ("HTTP/1.1 200 OK", "hello.html")
+} else {
+    ("HTTP/1.1 404 NOT FOUND", "404.html")
+};
+```
+`request_line` checks whether the request line of a GET request equals to the / path. If it does, it returns the contents of our `hello.html` file. If it does not, it returns the contents of our `404.html` file, which indicates that the path that we accessed did not available. In this case, I tried accessing `http://127.0.0.1:7878/bad` on my browser and it returned the `404.html` one.
+
+Here is what happened when I tried it:
+
+![Commit 3 screen capture](/assets/images/commit3.png)
+
+#### Why the refactoring is needed?
+In this case, refactoring is needed because there are too many duplicated/repeated if-else statements that do the same action, reading files and writing the contents of the files to the stream. The only differences are the status line and the filename. As a result, it is better to put those differences into separated (and smaller)if-else lines to make the code more concise.
