@@ -65,3 +65,17 @@ Here is what happened when I tried it:
 
 #### Why the refactoring is needed?
 In this case, refactoring is needed because there are too many duplicated/repeated if-else statements that do the same action, reading files and writing the contents of the files to the stream. The only differences are the status line and the filename. As a result, it is better to put those differences into separated (and smaller)if-else lines to make the code more concise.
+
+### Commit 4 Reflection
+#### Why the browser take some time to load `127.0.0.1/sleep`?
+We added the following part for this milestone.
+```
+"GET /sleep HTTP/1.1" => {
+    thread::sleep(Duration::from_secs(10));
+    ("HTTP/1.1 200 OK", "hello.html")
+}
+```
+
+When we access the endpoint `/sleep`, the request will cause our server to "sleep" for 10 seconds before responding. As a result, it takes some time for our browser to load it. At this moment, it is not a big problem for us, but what will happen when many users try to access it at the same time?
+
+Since our server is a single-threaded one, requests are handled sequentially, so when it is handling request to `/sleep`, it will pause the rest of othe requests that are running at the same time. This is why we still got a 10 seconds delay even though we accessed a different endpoint because the server is waiting for `/sleep` request to finish.
